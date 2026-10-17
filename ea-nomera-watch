@@ -2,7 +2,7 @@ import os, re, json, requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-NEWS_URL = "ТУК_ЛИНКА_КЪМ_СПИСЪКА_С_НОВИНИТЕ"
+NEWS_URL = "https://www.mvr.bg/veliko-tarnovo"
 KEYWORDS = r"регистрационен номер|номер по избор|\bЕА\b|електрическ"
 SEEN_FILE = "seen.json"
 TOPIC = os.environ["NTFY_TOPIC"]
