@@ -7,9 +7,24 @@ KEYWORDS = r"регистрационен номер|номер по избор|
 SEEN_FILE = "seen.json"
 TOPIC = os.environ["NTFY_TOPIC"]
 
-r = requests.get(NEWS_URL, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
-r.raise_for_status()
-soup = BeautifulSoup(r.text, "html.parser")
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "bg-BG,bg;q=0.9,en;q=0.8",
+    "Referer": "https://www.google.com/",
+}
+
+def fetch(url):
+    r = requests.get(url, timeout=30, headers=HEADERS)
+    if r.status_code == 200:
+        return r.text
+    print("Директно:", r.status_code, "- пробвам през прокси")
+    r = requests.get("https://r.jina.ai/" + url, timeout=60,
+                     headers={"X-Return-Format": "html"})
+    r.raise_for_status()
+    return r.text
+
+soup = BeautifulSoup(fetch(NEWS_URL), "html.parser")
 
 found = {}
 for a in soup.find_all("a", href=True):
